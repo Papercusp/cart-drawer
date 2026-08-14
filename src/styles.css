@@ -1,0 +1,506 @@
+/* @papercusp/cart-drawer — token CSS.
+ *
+ * Every color/font decision flows through a --cd-* custom property, falling
+ * back to the shadcn/Tailwind-v4-style --color-* theme vars a consumer app may
+ * already define (Restart does). A themed consumer (SideStage) overrides the
+ * --cd-* layer only. Ported from Restart CartShell's utility classes — DOM
+ * structure preserved so the port is pixel-comparable.
+ */
+
+:where(.cd-drawer-shell, .cd-surface, .cd-overlay-root) {
+  --cd-fg: var(--cd-foreground, var(--color-foreground, #111));
+  --cd-muted: var(--cd-muted-foreground, var(--color-muted-foreground, #666));
+  --cd-primary-c: var(--cd-primary, var(--color-primary, #4f46e5));
+  --cd-primary-fg: var(--cd-primary-foreground, var(--color-primary-foreground, #fff));
+  --cd-border-c: var(--cd-border, var(--color-border, #ddd));
+  --cd-card-c: var(--cd-card, var(--color-card, #fff));
+  --cd-bg: var(--cd-background, var(--color-background, #fafafa));
+  --cd-destructive-c: var(--cd-destructive, var(--color-destructive, #b91c1c));
+  --cd-muted-surface: var(--cd-muted-bg, var(--color-muted, #f2f2f2));
+}
+
+.cd-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.cd-tnum { font-variant-numeric: tabular-nums; }
+
+/* ── Drawer pane + surface ────────────────────────────────────────────────── */
+
+.cd-drawer-shell {
+  position: fixed;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  z-index: 60;
+  width: var(--cd-drawer-width, min(28rem, calc(100vw - 1rem)));
+  border-radius: 0.75rem;
+}
+
+.cd-surface {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: inherit;
+  border: 1px solid var(--cd-border-c);
+  background: color-mix(in oklab, var(--cd-card-c) 95%, transparent);
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  backdrop-filter: blur(24px);
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+
+.cd-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--cd-border-c) 70%, transparent);
+  background: linear-gradient(180deg, color-mix(in oklab, var(--cd-card-c) 94%, white 6%), var(--cd-card-c));
+  padding: 1.25rem 1.25rem 1rem;
+}
+
+.cd-header-main { display: flex; gap: 0.75rem; min-width: 0; }
+
+.cd-header-icon {
+  margin-top: 0.125rem;
+  display: inline-flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in oklab, var(--cd-primary-c) 25%, transparent);
+  background: color-mix(in oklab, var(--cd-primary-c) 12%, transparent);
+  color: var(--cd-primary-c);
+}
+
+.cd-header-copy { min-width: 0; }
+
+.cd-header-kicker {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--cd-primary-c);
+}
+
+.cd-header-title {
+  margin: 0.25rem 0 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--cd-fg);
+}
+
+.cd-header-desc {
+  margin: 0.25rem 0 0;
+  font-size: 12.5px;
+  line-height: 1.25rem;
+  color: var(--cd-muted);
+}
+
+.cd-header-chips { margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.375rem; }
+
+.cd-chip {
+  border-radius: 0.375rem;
+  border: 1px solid color-mix(in oklab, var(--cd-border-c) 70%, transparent);
+  background: color-mix(in oklab, var(--cd-bg) 35%, transparent);
+  padding: 0.25rem 0.5rem;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--cd-muted);
+}
+
+.cd-chip-accent {
+  border-color: color-mix(in oklab, var(--cd-primary-c) 20%, transparent);
+  background: color-mix(in oklab, var(--cd-primary-c) 10%, transparent);
+  color: var(--cd-primary-c);
+}
+
+.cd-header-close {
+  display: inline-flex;
+  height: 2rem;
+  width: 2rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  border: 1px solid color-mix(in oklab, var(--cd-border-c) 70%, transparent);
+  background: transparent;
+  color: var(--cd-muted);
+  cursor: pointer;
+  transition: border-color 150ms, background 150ms, color 150ms;
+}
+.cd-header-close:hover {
+  border-color: color-mix(in oklab, var(--cd-primary-c) 40%, transparent);
+  background: color-mix(in oklab, var(--cd-primary-c) 10%, transparent);
+  color: var(--cd-primary-c);
+}
+
+/* ── Body ────────────────────────────────────────────────────────────────── */
+
+.cd-body { flex: 1; overflow-y: auto; }
+
+.cd-lines { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.cd-skeleton-row {
+  height: 6rem;
+  border-radius: 0.5rem;
+  background: color-mix(in oklab, var(--cd-bg) 40%, transparent);
+  animation: cd-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes cd-pulse { 50% { opacity: 0.5; } }
+
+.cd-error {
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in oklab, var(--cd-destructive-c) 30%, transparent);
+  background: color-mix(in oklab, var(--cd-destructive-c) 10%, transparent);
+  padding: 0.75rem;
+  font-size: 14px;
+  color: var(--cd-destructive-c);
+}
+
+.cd-error-retry {
+  margin-top: 0.5rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* ── Line card ───────────────────────────────────────────────────────────── */
+
+.cd-line-card {
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in oklab, var(--cd-border-c) 60%, transparent);
+  background: color-mix(in oklab, var(--cd-bg) 35%, transparent);
+  padding: 0.75rem;
+  transition: border-color 150ms, background 150ms;
+}
+.cd-line-card:hover {
+  border-color: color-mix(in oklab, var(--cd-primary-c) 35%, transparent);
+  background: color-mix(in oklab, var(--cd-bg) 55%, transparent);
+}
+.cd-line-card[data-saved] {
+  border-color: color-mix(in oklab, var(--cd-primary-c) 25%, transparent);
+  background: color-mix(in oklab, var(--cd-primary-c) 8%, transparent);
+}
+
+.cd-line-row { display: flex; gap: 0.875rem; }
+
+.cd-line-media {
+  height: 5rem;
+  width: 5rem;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 0.375rem;
+  border: 1px solid color-mix(in oklab, var(--cd-border-c) 50%, transparent);
+  background: color-mix(in oklab, var(--cd-muted-surface) 40%, transparent);
+}
+
+.cd-line-img { height: 100%; width: 100%; object-fit: cover; }
+
+.cd-line-img-fallback {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--cd-muted);
+}
+
+.cd-line-main { min-width: 0; flex: 1; }
+.cd-line-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; }
+.cd-line-titleblock { min-width: 0; flex: 1; }
+.cd-line-badges { display: flex; min-width: 0; flex-wrap: wrap; align-items: center; gap: 0.375rem; }
+
+.cd-badge {
+  border-radius: 0.125rem;
+  padding: 2px 0.375rem;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.cd-badge-saved {
+  flex-shrink: 0;
+  font-weight: 600;
+  border: 1px solid color-mix(in oklab, var(--cd-primary-c) 25%, transparent);
+  background: color-mix(in oklab, var(--cd-primary-c) 10%, transparent);
+  color: var(--cd-primary-c);
+}
+.cd-badge-type {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  border: 1px solid color-mix(in oklab, var(--cd-border-c) 60%, transparent);
+  background: color-mix(in oklab, var(--cd-card-c) 45%, transparent);
+  color: color-mix(in oklab, var(--cd-muted) 80%, transparent);
+}
+
+.cd-line-title {
+  margin: 0.375rem 0 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.375;
+  color: var(--cd-fg);
+}
+
+.cd-line-unit {
+  margin: 0.25rem 0 0;
+  font-size: 11px;
+  line-height: 1rem;
+  color: var(--cd-muted);
+}
+
+.cd-line-total { flex-shrink: 0; text-align: right; }
+.cd-line-total-label {
+  margin: 0;
+  font-size: 9px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: color-mix(in oklab, var(--cd-muted) 70%, transparent);
+}
+.cd-line-total-amount {
+  margin: 0.25rem 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--cd-fg);
+}
+.cd-line-total-saved { color: var(--cd-muted); }
+
+.cd-line-controls {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cd-qty { display: flex; align-items: center; gap: 0.5rem; }
+.cd-qty-label {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: color-mix(in oklab, var(--cd-muted) 70%, transparent);
+}
+
+.cd-stepper {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 0.375rem;
+  border: 1px solid color-mix(in oklab, var(--cd-border-c) 70%, transparent);
+  background: color-mix(in oklab, var(--cd-card-c) 45%, transparent);
+}
+.cd-stepper[data-saved] {
+  border-color: color-mix(in oklab, var(--cd-primary-c) 25%, transparent);
+  background: color-mix(in oklab, var(--cd-primary-c) 8%, transparent);
+}
+
+.cd-stepper-btn {
+  display: inline-flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--cd-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background 150ms, color 150ms;
+}
+.cd-stepper-btn:hover { background: color-mix(in oklab, var(--cd-primary-c) 10%, transparent); color: var(--cd-primary-c); }
+.cd-stepper-btn:disabled { cursor: not-allowed; opacity: 0.4; }
+
+.cd-stepper-input {
+  height: 2rem;
+  width: 2.5rem;
+  border: none;
+  border-left: 1px solid color-mix(in oklab, var(--cd-border-c) 60%, transparent);
+  border-right: 1px solid color-mix(in oklab, var(--cd-border-c) 60%, transparent);
+  background: transparent;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  appearance: textfield;
+  color: var(--cd-fg);
+}
+.cd-stepper-input::-webkit-inner-spin-button,
+.cd-stepper-input::-webkit-outer-spin-button { appearance: none; }
+.cd-stepper-input[data-saved] { color: var(--cd-primary-c); }
+
+.cd-line-remove {
+  display: inline-flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background 150ms, color 150ms;
+  color: color-mix(in oklab, var(--cd-muted) 50%, transparent);
+}
+.cd-line-remove[data-saved] { color: color-mix(in oklab, var(--cd-primary-c) 80%, transparent); }
+.cd-line-remove:hover { background: color-mix(in oklab, var(--cd-primary-c) 10%, transparent); color: var(--cd-primary-c); }
+.cd-line-remove:disabled { cursor: not-allowed; opacity: 0.4; }
+
+.cd-line-alert {
+  margin: 0.5rem 0 0;
+  border-radius: 0.375rem;
+  border: 1px solid color-mix(in oklab, var(--cd-destructive-c) 25%, transparent);
+  background: color-mix(in oklab, var(--cd-destructive-c) 10%, transparent);
+  padding: 0.25rem 0.5rem;
+  font-size: 11px;
+  color: var(--cd-destructive-c);
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+
+.cd-empty-wrap { display: flex; flex: 1; align-items: center; justify-content: center; padding: 0 1rem 2.5rem; }
+
+.cd-empty {
+  max-width: 280px;
+  border-radius: 0.5rem;
+  border: 1px dashed var(--cd-border-c);
+  background: color-mix(in oklab, var(--cd-bg) 30%, transparent);
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+}
+
+.cd-empty-title { margin: 0; font-size: 15px; font-weight: 600; letter-spacing: -0.025em; color: var(--cd-fg); }
+.cd-empty-body { margin: 0.5rem 0 0; font-size: 12.5px; line-height: 1.55; color: var(--cd-muted); }
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+
+.cd-footer {
+  border-top: 1px solid color-mix(in oklab, var(--cd-border-c) 70%, transparent);
+  background: color-mix(in oklab, var(--cd-card-c) 95%, transparent);
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.cd-subtotal {
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in oklab, var(--cd-border-c) 70%, transparent);
+  background: color-mix(in oklab, var(--cd-bg) 30%, transparent);
+  padding: 0.75rem;
+}
+
+.cd-subtotal-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; }
+
+.cd-subtotal-label {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--cd-muted);
+}
+.cd-subtotal-sublabel { margin: 0.25rem 0 0; font-size: 11px; line-height: 1rem; color: var(--cd-muted); }
+.cd-subtotal-amount {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  color: var(--cd-fg);
+}
+.cd-subtotal-note {
+  margin: 0.5rem 0 0;
+  border-radius: 0.375rem;
+  border: 1px solid color-mix(in oklab, var(--cd-primary-c) 20%, transparent);
+  background: color-mix(in oklab, var(--cd-primary-c) 8%, transparent);
+  padding: 0.25rem 0.5rem;
+  font-size: 11px;
+  color: var(--cd-muted);
+}
+
+/* ── Fly-to-rail ghosts ──────────────────────────────────────────────────── */
+
+.cd-overlay-root {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+}
+
+.cd-fly-ghost {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 4rem;
+  width: 4rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  animation: cd-fly 850ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.cd-fly-img { height: 100%; width: 100%; border-radius: inherit; object-fit: cover; }
+
+.cd-fly-fallback {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  background: color-mix(in oklab, var(--cd-primary-c) 20%, transparent);
+  padding: 0 0.75rem;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: color-mix(in oklab, var(--cd-primary-fg) 90%, transparent);
+}
+
+@keyframes cd-fly {
+  0% {
+    transform: translate(var(--cd-fly-from-x), var(--cd-fly-from-y)) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--cd-fly-to-x), var(--cd-fly-to-y)) scale(0.25);
+    opacity: 0.1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-fly-ghost { animation: none; display: none; }
+  .cd-skeleton-row { animation: none; }
+}
